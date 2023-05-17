@@ -75,7 +75,7 @@ const ProductScreen = () => {
                             </Row>
                         </ListGroup.Item>
 
-                        {product.countInStock >0 && (
+            {product.countInStock >0 && (
               <ListGroup.Item>
 
                 <Row>
