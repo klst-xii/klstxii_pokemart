@@ -3,7 +3,7 @@ import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-route
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
-import {addToCart} from '../actions/cartActions'
+import {addToCart, removeFromCart} from '../actions/cartActions'
 
 
 
@@ -24,7 +24,11 @@ function CartScreen() {
     }, [dispatch, id, qty])
 
     const removeFromCartHandler = (id) => {
-        console.log('remove:', id)
+        dispatch(removeFromCart(id))
+    }
+
+    const checkoutHandler = () => {
+
 
     }
 
@@ -97,6 +101,8 @@ function CartScreen() {
                     <Button
                         type='button'
                         className='btn-block'
+                        disabled={cartItems.length === 0}
+                        onCLick={checkoutHandler}
                     >
                         Proceed To Checkout
                     </Button>                                        
