@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link, Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
@@ -17,6 +17,9 @@ function CartScreen() {
     const cart = useSelector(state => state.cart)
     const { cartItems } = cart
 
+    // const userLogin = useSelector((state) => state.userLogin)
+    // const { userInfo } = userLogin
+
     useEffect(() => {
         if (id) {
             dispatch(addToCart(id, qty))
@@ -28,8 +31,7 @@ function CartScreen() {
     }
 
     const checkoutHandler = () => {
-
-
+       navigate('/shipping')
     }
 
   return (
@@ -102,10 +104,10 @@ function CartScreen() {
                         type='button'
                         className='btn-block'
                         disabled={cartItems.length === 0}
-                        onCLick={checkoutHandler}
+                        onClick={checkoutHandler}
                     >
                         Proceed To Checkout
-                    </Button>                                        
+                    </Button>                                     
                 </ListGroup.Item>
 
             </Card>

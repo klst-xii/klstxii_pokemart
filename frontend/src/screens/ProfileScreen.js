@@ -8,7 +8,7 @@ import {getUserDetails, updateUserProfile} from '../actions/userActions';
 import {USER_UPDATE_PROFILE_RESET} from '../constants/userConstants';
 
 
-function ProfileScreen() {
+function ProfileScreen({ history }) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -23,15 +23,15 @@ function ProfileScreen() {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin;
 
-    const userUpdateProfile = useSelector(state => state.userUpdateProfile)
-    const { success } = userUpdateProfile;
+    // const userUpdateProfile = useSelector(state => state.userUpdateProfile)
+    // const { success } = userUpdateProfile;
 
     const navigate = useNavigate()
     useEffect(() => {
       if (!userInfo) {
           navigate('/login')
       }else{
-        if (!user || !user.name || success) {
+        if (!user || !user.name ) { // || success
             dispatch({ type: USER_UPDATE_PROFILE_RESET })
             dispatch(getUserDetails('profile'))
         }else {
@@ -39,7 +39,7 @@ function ProfileScreen() {
             setEmail(user.email)
         }
       }
-    }, [dispatch, navigate, userInfo, user, success])
+    }, [dispatch, navigate, userInfo, user, ]) //success
 
     const submitHandler = (e) => {
         e.preventDefault()
@@ -62,7 +62,7 @@ function ProfileScreen() {
         <Col md={3}>
             <h2>User Profile</h2>
 
-            {message && <Message variant='danger'>{message}</Message> }
+        {message && <Message variant='danger'>{message}</Message> }
         {error && <Message variant='danger'>{error}</Message>}
         {loading && <Loader />}
         <Form onSubmit={submitHandler}>
