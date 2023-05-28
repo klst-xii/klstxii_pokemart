@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Row, Col, ListGroup, Image, Card, ListGroupItem } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
+import { createOrder } from '../actions/orderActions'
 
 function PlaceOrderScreen() {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const orderCreate = useSelector(state => state.orderCreate)
+    const { order, error, success } = orderCreate
+
     const cart = useSelector(state => state.cart)
 
     cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
@@ -14,8 +22,26 @@ function PlaceOrderScreen() {
 
     cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2)
 
+
+    useEffect(() => {
+        if (success) {
+            navigate(`/order/${order._id}`)
+        }
+        if (!cart.paymentMethod) {
+            navigate('/payment')
+        }
+    }, [success, navigate])
+
     const placeOrder = () => {
-        console.log('place order')
+        dispatch(createOrder({
+            orderItems: cart.cartItems,
+            shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice,
+        }))
     }
 
   return (
@@ -107,6 +133,10 @@ function PlaceOrderScreen() {
                                 <Col>Total:</Col>
                                 <Col>${cart.totalPrice}</Col>
                             </Row>
+                        </ListGroup.Item>
+
+                        <ListGroup.Item>
+                            {error && <Message variant='danger'>{error}</Message>}
                         </ListGroup.Item>
 
                         <ListGroup.Item>
